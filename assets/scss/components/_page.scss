@@ -1,0 +1,15 @@
+.main-content {
+    padding: rem(80px) rem(40px) rem(16px);
+}
+
+.the-page {
+    max-width: rem(1024px);
+    margin: 0 auto;
+    padding: rem(32px) rem(16px) 0;
+
+    .the-title {
+        @include h1();
+
+        margin-bottom: rem(22px);
+    }
+}

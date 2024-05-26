@@ -1,0 +1,10 @@
+.single-post {
+    max-width: $maximum-page-width;
+    margin: 0 auto;
+
+    .the-title {
+        @include h1();
+
+        margin-bottom: rem(32px);
+    }
+}
