@@ -101,6 +101,37 @@ class RH_Helpers {
 	}
 
 	/**
+	 * Pass posts from a WP_Query to a provided callback function
+	 *
+	 * @param  WP_Query $the_query The WP_Query to loop over and get posts
+	 * @param  array    $args Arguments to modify what is rendered. Passed to the callback.
+	 * @param  string   $callback A callable class + method or a function that should be executed on every post object iterated through
+	 *
+	 * @throws Exception If $the_query is not a WP_Query object
+	 * @throws Exception If $callback is not a callable functon via is_callable()
+	 */
+	public static function render_from_wp_query( $the_query = false, $args = array(), $callback = '' ) {
+		global $wp_query;
+		if ( ! $the_query ) {
+			$the_query = $wp_query;
+		}
+		if ( ! $the_query instanceof WP_Query ) {
+			throw new Exception( '$the_query is not a WP_Query object!' );
+		}
+		if ( ! is_callable( $callback ) ) {
+			throw new Exception( '$callback is not callable!' );
+		}
+		$output = array();
+		if ( ! empty( $the_query->posts ) ) {
+			foreach ( $the_query->posts as $the_post ) {
+				$output[] = $callback( $the_post, $args );
+				wp_reset_postdata();
+			}
+		}
+		return $output;
+	}
+
+	/**
 	 * Calculate various formats for a given date
 	 *
 	 * @param  string $date The date to convert to other formats
