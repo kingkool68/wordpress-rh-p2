@@ -97,95 +97,73 @@ class RH_Posts {
 	}
 
 	/**
-	 * Render an archive item using data passed to the method
+	 * Render a post
 	 *
-	 * @param array $args Data to use to render the component
-	 * @return string A rendered archive item component
+	 * @param  array $args Arguments to modify what is rendered
 	 */
-	public static function render_archive_item( $args = array() ) {
-		$defaults = array(
-			'the_title'        => '',
-			'the_date'         => '',
-			'display_date'     => '',
-			'display_time'     => '',
-			'display_datetime' => '',
-			'machine_date'     => '',
-			'the_categories'   => '',
-			'the_excerpt'      => '',
-			'the_url'          => '',
-			'the_image'        => '',
+	public static function render( $args = array() ) {
+		$defaults               = array(
+			'the_title'                => '',
+			'the_title_url'            => '',
+			'the_author'               => '',
+			'the_author_avatar_url'    => '',
+			'the_publish_date'         => '',
+			'the_publish_machine_date' => '',
+			'the_content'              => '',
+			'the_tags'                 => array(),
 		);
-
 		$context                = wp_parse_args( $args, $defaults );
 		$context['the_title']   = apply_filters( 'the_title', $context['the_title'] );
-		$context['the_excerpt'] = apply_filters( 'the_content', $context['the_excerpt'] );
-
-		if ( ! empty( $context['the_date'] ) ) {
-			$date                        = RH_Helpers::get_date_values( $context['the_date'] );
-			$context['display_date']     = $date->display_date;
-			$context['display_time']     = $date->display_time;
-			$context['display_datetime'] = $date->display_datetime;
-			$context['machine_date']     = $date->machine_date;
-		}
-
-		return Sprig::render( 'post-archive-item.twig', $context );
+		$context['the_content'] = apply_filters( 'the_content', $context['the_content'] );
+		return Sprig::render( 'the-post.twig', $context );
 	}
 
 	/**
-	 * Render an archive item using data from a WP_Post object
+	 * Render a post from a WP_Post object
 	 *
-	 * @param integer|WP_Post $post WordPress post to fetch data for
-	 * @param array           $args Arguments to override the post data
-	 * @return string A rendered archive item
+	 * @param  WP_Post|integer $post The WP_Post to use as data for rendering
+	 * @param  array           $args Arguments to modify what is rendered
 	 */
-	public static function render_archive_item_from_post( $post, $args = array() ) {
-		$post  = get_post( $post );
-		$image = RH_Media::render_image_from_post( $post->ID );
-		if ( empty( $image ) && defined( 'RH_DEFAULT_BLOG_FEATURED_IMAGE_ID' ) ) {
-			$image = RH_Media::render_image_from_post( RH_DEFAULT_BLOG_FEATURED_IMAGE_ID );
+	public static function render_from_post( $post = 0, $args = array() ) {
+		$post      = get_post( $post );
+		$date      = get_post_datetime( $post );
+		$author_id = $post->post_author;
+
+		$the_tags = array();
+		$tags     = wp_get_object_terms( $post->ID, 'post_tag', array() );
+		if ( ! empty( $tags ) ) {
+			foreach ( $tags as $the_tag ) {
+				$the_tags[ $the_tag->slug ] = get_term_link( $the_tag );
+			}
 		}
+
 		$defaults = array(
-			'the_title'   => get_the_title( $post ),
-			'the_date'    => $post->post_date,
-			'the_excerpt' => get_the_excerpt( $post ),
-			'the_url'     => get_permalink( $post ),
-			'the_image'   => $image,
+			'the_title'                => get_the_title( $post ),
+			'the_title_url'            => get_permalink( $post ),
+			'the_author'               => get_the_author_meta( 'display_name', $author_id ),
+			'the_author_avatar_url'    => get_avatar_url(
+				$author_id,
+				array(
+					'size' => 80,
+				)
+			),
+			'the_publish_date'         => $date->format( 'g:i a \o\n F j, Y' ),
+			'the_publish_machine_date' => $date->format( DATE_W3C ),
+			'the_content'              => get_the_content( $more_link_text = null, $strip_teaser = false, $post ),
+			'the_tags'                 => $the_tags,
 		);
-		$args     = wp_parse_args( $args, $defaults );
-
-		return static::render_archive_item( $args );
+		$args = wp_parse_args( $args, $defaults );
+		return static::render( $args );
 	}
 
 	/**
-	 * Render archive items from a WP_Query object
+	 * Render a series of posts from a WP_Query
 	 *
-	 * @param boolean $the_query WP_Query object to loop over and render archive items
-	 * @param array   $args Arguments to pass to the render_archive_item_from_post() method
-	 *
-	 * @throws Exception $the_query is not a WP_Query object
-	 *
-	 * @return string Rendered archive items
+	 * @param  WP_Query $the_query The WP_Query to loop over and get posts
+	 * @param  array    $args Arguments to modify what is rendered
 	 */
-	public static function render_archive_items_from_wp_query( $the_query = false, $args = array() ) {
-		global $wp_query;
-		if ( ! $the_query ) {
-			$the_query = $wp_query;
-		}
-		if ( ! $the_query instanceof WP_Query ) {
-			throw new Exception( '$the_query is not a WP_Query object!' );
-		}
-
-		if ( empty( $the_query->posts ) ) {
-			return '';
-		}
-
-		$output = array();
-		while ( $the_query->have_posts() ) :
-			$post     = $the_query->the_post();
-			$output[] = static::render_archive_item_from_post( $post, $args );
-		endwhile;
-		wp_reset_postdata();
-		return implode( "\n", $output );
+	public static function render_from_wp_query( $the_query = false, $args = array() ) {
+		return RH_Helpers::render_from_wp_query( $the_query, $args, array( static::class, 'render_from_post' ) );
 	}
 }
 RH_Posts::get_instance();

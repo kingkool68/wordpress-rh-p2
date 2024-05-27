@@ -2,42 +2,6 @@
 
 {% block content %}
 
-	<article class="single-post">
-		<div class="the-post">
-			<h1 class="the-title">{{ the_title }}</h1>
-
-			<div class="the-meta-info">
-				{% if the_author_avatar_url %}
-					<img src="{{ the_author_avatar_url|esc_url }}" class="the-avatar">
-				{% endif %}
-
-				<div>
-					{% if the_author %}
-						<p class="the-author">{{ the_author }}</p>
-					{% endif %}
-
-					{% if the_publish_date %}
-						<time class="the-publish-date" datetime="{{ the_publish_machine_date|esc_attr }}">
-							{{ the_publish_date }}
-						</time>
-					{% endif %}
-				</div>
-			</div>
-
-			<div class="the-content wysiwyg">
-				{{ the_content }}
-			</div>
-
-			{% if the_tags %}
-				<ol class="the-tags">
-				{% for slug, term_url in the_tags %}
-					<li>
-						<a href="{{ term_url|esc_url }}" class="the-tag">#{{ slug }}</a>
-					<li>
-				{% endfor %}
-				</ol>
-			{% endif %}
-		</div>
-	</article>
+	{{ the_post }}
 
 {% endblock %}

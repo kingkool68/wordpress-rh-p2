@@ -1,11 +1,41 @@
+.the-posts {
+    >*+* {
+        margin-top: rem(128px);
+        position: relative;
+
+        &::after {
+            content: ' ';
+            position: absolute;
+            top: rem(-64px);
+            left: calc(50% - 50vw);
+            right: calc(50% - 50vw);
+
+            width: 99.625vw;
+            height: rem(1px);
+            background-color: $gray-15;
+        }
+    }
+}
+
 .single-post {
     max-width: $maximum-page-width;
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
 
     .the-title {
         @include h1();
 
         margin-bottom: rem(32px);
+
+        a {
+            color: $black;
+            text-decoration: none;
+
+            &:hover,
+            &:focus {
+                text-decoration: underline;
+            }
+        }
     }
 
     .the-meta-info {

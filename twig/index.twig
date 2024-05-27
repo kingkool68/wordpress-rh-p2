@@ -1,11 +1,13 @@
 {% extends 'base.twig' %}
 
 {% block content %}
-	<section class="archive-description">
-		<p>(Index)</p>
-	</section>
+	{% if the_posts %}
+		<div class="the-posts">
+			{% for item in the_posts %}
+				{{ item }}
+			{% endfor %}
+		</div>
+	{% endif %}
 
-	{{ the_loop }}
 	{{ pagination }}
-
 {% endblock %}
