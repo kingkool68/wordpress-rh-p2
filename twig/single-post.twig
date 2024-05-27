@@ -27,6 +27,16 @@
 			<div class="the-content wysiwyg">
 				{{ the_content }}
 			</div>
+
+			{% if the_tags %}
+				<ol class="the-tags">
+				{% for slug, term_url in the_tags %}
+					<li>
+						<a href="{{ term_url|esc_url }}" class="the-tag">#{{ slug }}</a>
+					<li>
+				{% endfor %}
+				</ol>
+			{% endif %}
 		</div>
 	</article>
 

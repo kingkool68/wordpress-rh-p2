@@ -29,4 +29,23 @@
     .the-publish-date {
         font-size: rem(14px);
     }
+
+    .the-tags {
+        display: flex;
+        gap: rem(4px);
+    }
+
+    .the-tag {
+        display: block;
+        padding: rem(2px) rem(4px);
+        background-color: #f3f3f3;
+        line-height: 1.8125;
+        font-weight: 500;
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            text-decoration: underline;
+        }
+    }
 }
