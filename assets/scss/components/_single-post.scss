@@ -7,4 +7,26 @@
 
         margin-bottom: rem(32px);
     }
+
+    .the-meta-info {
+        display: flex;
+        align-items: center;
+        gap: rem(16px);
+        margin-bottom: rem(32px);
+    }
+
+    .the-avatar {
+        border-radius: 50%;
+        width: rem(48px);
+        height: rem(48px);
+    }
+
+    .the-author {
+        font-weight: 600;
+        margin-bottom: rem(4px);
+    }
+
+    .the-publish-date {
+        font-size: rem(14px);
+    }
 }
