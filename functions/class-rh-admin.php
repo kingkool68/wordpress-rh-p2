@@ -64,9 +64,6 @@ class RH_Admin {
 	public function action_wp_before_admin_bar_render() {
 		global $wp_admin_bar;
 
-		// Remove comments because we don't have comments
-		$wp_admin_bar->remove_menu( 'comments' );
-
 		// Remove the Customizer menu
 		$wp_admin_bar->remove_menu( 'customize' );
 	}
@@ -76,7 +73,6 @@ class RH_Admin {
 	 */
 	public function action_admin_menu() {
 		global $menu;
-		unset( $menu[25] ); // Comments
 
 		// Move the Revisions menu item to the bottom
 		foreach ( $menu as $key => $item ) {
