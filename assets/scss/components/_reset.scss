@@ -186,9 +186,14 @@ optgroup,
 select,
 textarea {
     font-family: inherit; // Font family should be inherited from the parent element
-    font-size: 100%;
+    font-size: inherit;
     line-height: 1.15;
     margin: 0; // Remove the margin in Firefox and Safari
+}
+
+/* Make sure textareas without a rows attribute are not tiny */
+textarea:not([rows]) {
+    min-height: 10em;
 }
 
 button,
