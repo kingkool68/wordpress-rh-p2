@@ -18,7 +18,7 @@ h3[id],
 h4[id],
 h5[id],
 h6[id] {
-    @include anchor_link_offset();
+    // @include anchor_link_offset();
 }
 
 .site-header {
