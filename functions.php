@@ -29,6 +29,7 @@ $files_to_require = array(
 	'class-rh-post-type-archives.php',
 	'class-rh-posts.php',
 	'class-rh-pages.php',
+	'class-rh-comments.php',
 
 	'class-rh-blocks.php',
 	'class-rh-cli.php',
@@ -126,7 +127,7 @@ add_filter( 'sprig/twig/functions', 'filter_sprig_twig_functions' );
  */
 add_action(
 	'init',
-	function() {
+	function () {
 		add_theme_support( 'title-tag' );
 		add_theme_support( 'align-wide' );
 	}

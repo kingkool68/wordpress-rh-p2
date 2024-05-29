@@ -1,0 +1,13 @@
+<p class="logged-in-as">
+	{% if the_avatar_url %}
+		<img src="{{ the_avatar_url|esc_url }}" class="the-avatar">
+	{% endif %}
+
+	<span class="user-name">
+		{{ the_name }}
+
+		{% if the_logout_url %}
+			<a href="{{ the_logout_url|esc_url }}" class="log-out">Log out?</a>
+		{% endif %}
+	</span>
+</p>

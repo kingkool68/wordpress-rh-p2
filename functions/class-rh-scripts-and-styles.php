@@ -59,9 +59,9 @@ class RH_Scripts_And_Styles {
 		wp_register_style(
 			'rh',
 			get_template_directory_uri() . '/assets/css/rhp2.min.css',
-			array(),
-			null,
-			'all'
+			$deps  = array(),
+			$ver   = null,
+			$media = 'all'
 		);
 
 		wp_register_script(

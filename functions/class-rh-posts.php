@@ -111,6 +111,8 @@ class RH_Posts {
 			'the_publish_machine_date' => '',
 			'the_content'              => '',
 			'the_tags'                 => array(),
+			'the_comments'             => '',
+			'the_comment_form'         => '',
 		);
 		$context                = wp_parse_args( $args, $defaults );
 		$context['the_title']   = apply_filters( 'the_title', $context['the_title'] );
@@ -151,6 +153,8 @@ class RH_Posts {
 			'the_publish_machine_date' => $date->format( DATE_W3C ),
 			'the_content'              => get_the_content( $more_link_text = null, $strip_teaser = false, $post ),
 			'the_tags'                 => $the_tags,
+			'the_comments'             => RH_Comments::render_comments(),
+			'the_comment_form'         => RH_Comments::render_comment_form(),
 		);
 		$args = wp_parse_args( $args, $defaults );
 		return static::render( $args );

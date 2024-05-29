@@ -1,0 +1,71 @@
+@import 'base/_imports.scss';
+
+.comment-respond {
+    padding-top: fluid(32px, 64px);
+
+    .comment-reply-title {
+        @include h2();
+    }
+
+    .logged-in-as {
+        display: flex;
+        align-items: center;
+        margin-bottom: rem(16px);
+
+        .user-name {
+            font-weight: 600;
+            font-size: rem(18px);
+        }
+
+        .the-avatar {
+            margin-right: rem(8px);
+        }
+
+        .log-out {
+            font-size: rem(14px);
+            font-weight: 400;
+            line-height: 1.5;
+            text-decoration: none;
+            display: block;
+
+            &:hover,
+            &:focus {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .comment-form {
+
+        >* {
+            padding: rem(8px) 0;
+        }
+
+        label {
+            display: block;
+            padding-bottom: rem(8px);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="url"],
+        textarea {
+            border-radius: rem(6px);
+            border: rem(1px) solid $gray-15;
+            width: 100%;
+            padding: rem(8px) rem(12px);
+        }
+
+        textarea {
+            line-height: 1.85;
+        }
+
+        .form-submit {
+            text-align: right;
+        }
+
+        .submit {
+            @include primary_button();
+        }
+    }
+}
