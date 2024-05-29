@@ -91,3 +91,33 @@
     }
   }
 }
+
+@mixin primary_button($bg_color: $link-blue, $color: $white ) {
+  background-color: $bg_color;
+  border: rem(2px) solid $bg_color;
+  border-radius: rem(24px);
+  color: $color;
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 700;
+  padding: rem(12px) rem(24px);
+  text-decoration: none;
+
+  $hover_color: $link-blue-dark;
+
+  &:hover,
+  &:focus-visible {
+    background-color: $hover_color;
+    border-color: $hover_color;
+    text-decoration: none;
+  }
+
+  &:focus {
+    text-decoration: none;
+  }
+
+  &:active {
+    background-color: $bg_color;
+    border-color: $bg_color;
+  }
+}
