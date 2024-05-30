@@ -162,3 +162,55 @@ if ( ! function_exists( 'str_contains' ) ) {
 		return '' === $needle || false !== strpos( $haystack, $needle );
 	}
 }
+
+if ( ! function_exists( 'get_comment_datetime' ) ) {
+
+	/**
+	 * Retrieve comment published time as a `DateTimeImmutable` object instance.
+	 *
+	 * The object will be set to the timezone from WordPress settings.
+	 *
+	 * For legacy reasons, this function allows to choose to instantiate from local or UTC time in database.
+	 * Normally this should make no difference to the result. However, the values might get out of sync in database,
+	 * typically because of timezone setting changes. The parameter ensures the ability to reproduce backwards
+	 * compatible behaviors in such cases.
+	 *
+	 * @link https://core.trac.wordpress.org/ticket/48207
+	 *
+	 * @since 5.4.0
+	 *
+	 * @param int|WP_Comment $comment   Optional. WP_Comment object or ID. Default is global `$comment` object.
+	 * @param string         $source Optional. Local or UTC time to use from database. Accepts 'local' or 'gmt'.
+	 *                            Default 'local'.
+	 * @return DateTimeImmutable|false Time object on success, false on failure.
+	 */
+	function get_comment_datetime( $comment = null, $source = 'local' ) {
+			$comment = get_comment( $comment );
+
+		if ( ! $comment ) {
+			return false;
+		}
+
+		$wp_timezone = wp_timezone();
+
+		if ( 'gmt' === $source ) {
+			$time     = $comment->comment_date_gmt;
+			$timezone = new DateTimeZone( 'UTC' );
+		} else {
+			$time     = $comment->comment_date;
+			$timezone = $wp_timezone;
+		}
+
+		if ( empty( $time ) || '0000-00-00 00:00:00' === $time ) {
+				return false;
+		}
+
+		$datetime = date_create_immutable_from_format( 'Y-m-d H:i:s', $time, $timezone );
+
+		if ( false === $datetime ) {
+				return false;
+		}
+
+		return $datetime->setTimezone( $wp_timezone );
+	}
+}
