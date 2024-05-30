@@ -1,7 +1,92 @@
 @import 'base/_imports.scss';
 
+.the-comments {
+
+    .the-comment-section-title {
+        @include h2();
+
+        margin-top: rem(48px);
+        padding-bottom: rem(16px);
+    }
+
+    .comment {
+        padding: rem(16px) 0;
+
+        &.depth-1 {
+            border-top: rem(1px) solid #d8dbdd;
+        }
+    }
+
+    .comment-header {
+        display: flex;
+        align-items: center;
+    }
+
+    .the-avatar-link {
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            .the-avatar {
+                box-shadow: 0 0 0 rem(2px) $link-blue;
+            }
+        }
+    }
+
+    .the-avatar {
+        margin-right: rem(8px);
+        width: rem(32px);
+        height: rem(32px);
+
+    }
+
+    .comment-author {
+        font-weight: 600;
+        font-size: rem(15px);
+    }
+
+    .comment-date {
+        font-size: rem(12px);
+        text-decoration: none;
+        margin-left: rem(4px);
+
+        &:hover,
+        &:focus {
+            text-decoration: underline;
+        }
+    }
+
+    .the-comment {
+        margin-left: rem(42px);
+        padding: rem(8px) 0;
+
+        p {
+            margin-bottom: rem(16px);
+        }
+    }
+
+    .children {
+        padding-left: rem(40px);
+    }
+
+    .comment-footer {
+        margin-left: rem(42px);
+    }
+
+    .comment-reply-link {
+        font-size: rem(12px);
+        color: #767676;
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            color: $black;
+        }
+    }
+}
+
 .comment-respond {
-    padding-top: fluid(32px, 64px);
+    padding-top: rem(16px);
 
     .comment-reply-title {
         @include h2();
@@ -14,11 +99,7 @@
 
         .user-name {
             font-weight: 600;
-            font-size: rem(18px);
-        }
-
-        .the-avatar {
-            margin-right: rem(8px);
+            font-size: rem(15px);
         }
 
         .log-out {

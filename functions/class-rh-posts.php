@@ -153,6 +153,7 @@ class RH_Posts {
 			'the_publish_machine_date' => $date->format( DATE_W3C ),
 			'the_content'              => get_the_content( $more_link_text = null, $strip_teaser = false, $post ),
 			'the_tags'                 => $the_tags,
+			'the_comments_count'        => get_comments_number( $post->ID ),
 			'the_comments'             => RH_Comments::render_comments(),
 			'the_comment_form'         => RH_Comments::render_comment_form(),
 		);

@@ -1,0 +1,22 @@
+<li>
+    <div class="comment depth-{{ the_depth|absint }}" id="comment-{{ the_id|absint }}">
+        <header class="comment-header">
+            {% if the_avatar_url %}
+                <a href="#comment-{{ the_id|absint }}" class="the-avatar-link">
+                    <img src="{{ the_avatar_url|esc_url }}" class="the-avatar">
+                </a>
+            {% endif %}
+
+            <span class="comment-author">
+		        {{ the_name }}
+            </span>
+            <a href="#comment-{{ the_id|absint }}" class="comment-date">
+                <time datetime="{{ the_machine_date|esc_attr }}">{{ the_date }}</time>
+            </a>
+        </header>
+        <div class="the-comment">{{ the_comment }}</div>
+        <footer class="comment-footer">
+            {{ the_reply_link }}
+        </footer>
+    </div>
+</li>

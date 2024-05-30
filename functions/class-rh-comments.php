@@ -65,7 +65,6 @@ class RH_Comments {
 				$comment_args['include_unapproved'] = array( $unapproved_email );
 			}
 		}
-
 		$comments     = get_comments( $comment_args );
 		$the_comments = wp_list_comments(
 			array(
@@ -74,16 +73,39 @@ class RH_Comments {
 				'short_ping'  => false,
 				'echo'        => false,
 				'type'        => 'comment',
-				// 'callback'    => array( static::class, 'render_comment' ),
+				'format'      => 'html5',
+				'callback'    => array( static::class, 'render_comment' ),
 			),
 			$comments
 		);
 		return $the_comments;
 	}
 
-	public static function render_comment( $comment, $args, $depth ) {
-		var_dump( $comment );
-		echo '<p>Comment!</p>';
+	public static function render_comment( $the_comment, $args, $the_depth ) {
+		// var_dump( $the_comment );
+		// var_dump( $args );
+		$comment_date = get_comment_datetime( $the_comment );
+		$context      = array(
+			'the_id'           => $the_comment->comment_ID,
+			'the_name'         => $the_comment->comment_author,
+			'the_avatar_url'   => get_avatar_url(
+				$the_comment->comment_author_email,
+				array(
+					'size' => absint( $args['avatar_size'] ),
+				)
+			),
+			'the_date'         => $comment_date->format( 'g:i a \o\n F j, Y' ),
+			'the_machine_date' => $comment_date->format( DATE_W3C ),
+			'the_comment'      => apply_filters( 'the_content', get_comment_text( $the_comment ) ),
+			'the_reply_link'   => get_comment_reply_link(
+				array(
+					'depth'     => $the_depth,
+					'max_depth' => absint( $args['max_depth'] ),
+				)
+			),
+			'the_depth'        => $the_depth,
+		);
+		Sprig::out( 'comment.twig', $context );
 	}
 
 	public static function render_comment_form( $args = array(), $post = null ) {
@@ -98,6 +120,7 @@ class RH_Comments {
 		);
 		$args     = wp_parse_args( $args, $defaults );
 		wp_enqueue_style( 'rh-comment-form' );
+		wp_enqueue_script( 'comment-reply' );
 		ob_start();
 		comment_form( $args, $post );
 		return ob_get_clean();
