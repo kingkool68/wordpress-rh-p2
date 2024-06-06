@@ -42,16 +42,29 @@ class RH_Comments {
 		);
 	}
 
-	public static function render() {
-		if ( comments_open() || get_comments_number() ) {
-			// return comments_template();
+	public static function render( $args = array(), $post = null ) {
+		if ( ! comments_open() && ! get_comments_number() ) {
+			return;
 		}
-		return '';
+		$post     = get_post( $post );
+		$defaults = array(
+			'the_comments_count'     => get_comments_number( $post->ID ),
+			'the_comments'           => static::render_comments( $post->ID ),
+			'the_comment_form'       => static::render_comment_form(),
+			'the_comments_permalink' => '',
+		);
+		$context  = wp_parse_args( $args, $defaults );
+		if ( ! is_singular() ) {
+			$context['the_comment_form']       = '';
+			$context['the_comments_permalink'] = get_permalink( $post );
+		}
+		return Sprig::render( 'the-comments.twig', $context );
 	}
 
-	public static function render_comments() {
+	public static function render_comments( $post = null ) {
+		$post         = get_post( $post );
 		$comment_args = array(
-			'post_id' => get_the_ID(),
+			'post_id' => $post->ID,
 			'orderby' => 'comment_date_gmt',
 			'order'   => 'ASC',
 			'status'  => 'approve',
@@ -68,13 +81,16 @@ class RH_Comments {
 		$comments     = get_comments( $comment_args );
 		$the_comments = wp_list_comments(
 			array(
-				'avatar_size' => 60,
-				'style'       => 'ol',
-				'short_ping'  => false,
-				'echo'        => false,
-				'type'        => 'comment',
-				'format'      => 'html5',
-				'callback'    => array( static::class, 'render_comment' ),
+				'avatar_size'  => 60,
+				'style'        => 'ol',
+				'short_ping'   => false,
+				'echo'         => false,
+				'type'         => 'comment',
+				'format'       => 'html5',
+				'callback'     => array( static::class, 'render_comment' ),
+				'end-callback' => function () {
+					return '</li>';
+				},
 			),
 			$comments
 		);
@@ -110,13 +126,16 @@ class RH_Comments {
 
 	public static function render_comment_form( $args = array(), $post = null ) {
 		$defaults = array(
-			'logged_in_as'       => static::render_logged_in_as(),
-			'title_reply'        => '',
-			'title_reply_to'     => 'Reply to %s',
-			'title_reply_before' => '<h2 id="reply-title" class="comment-reply-title">',
-			'title_reply_after'  => '</h2>',
-			'label_submit'       => 'Reply',
-			'format'             => 'html5',
+			'logged_in_as'         => static::render_logged_in_as(),
+			'title_reply'          => '',
+			'title_reply_to'       => '<span class="reply-to">to %s</span>',
+			'title_reply_before'   => '<h2 id="reply-title" class="comment-reply-title">',
+			'title_reply_after'    => '</h2>',
+			'cancel_reply_link'    => 'Cancel',
+			'comment_notes_before' => '',
+			'comment_notes_after'  => '',
+			'label_submit'         => 'Reply',
+			'format'               => 'html5',
 		);
 		$args     = wp_parse_args( $args, $defaults );
 		wp_enqueue_style( 'rh-comment-form' );

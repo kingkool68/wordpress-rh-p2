@@ -7,6 +7,16 @@
 
         margin-top: rem(48px);
         padding-bottom: rem(16px);
+
+        a {
+            text-decoration: none;
+            color: $black;
+
+            &:hover,
+            &:focus {
+                text-decoration: underline;
+            }
+        }
     }
 
     .comment {
@@ -24,6 +34,7 @@
 
     .the-avatar-link {
         text-decoration: none;
+        outline: none;
 
         &:hover,
         &:focus {
@@ -65,8 +76,16 @@
         }
     }
 
-    .children {
+    .depth-2 {
         padding-left: rem(40px);
+    }
+
+    .depth-3 {
+        padding-left: rem(80px);
+    }
+
+    .depth-4 {
+        padding-left: rem(120px);
     }
 
     .comment-footer {
@@ -89,7 +108,26 @@
     padding-top: rem(16px);
 
     .comment-reply-title {
-        @include h2();
+        font-size: rem(15px);
+        color: #767676;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        small {
+            font-size: rem(13px);
+
+            a {
+                @include primary_button($bg_color: transparent, $color: $black );
+
+                &:hover,
+                &:focus {
+                    background-color: #f9f9f9;
+                    border-color: #f9f9f9;
+                }
+            }
+        }
     }
 
     .logged-in-as {
@@ -120,6 +158,14 @@
 
         >* {
             padding: rem(8px) 0;
+        }
+
+        .required {
+            font-size: rem(14px);
+            color: $logo-red;
+            vertical-align: text-top;
+            position: relative;
+            left: -2px;
         }
 
         label {
