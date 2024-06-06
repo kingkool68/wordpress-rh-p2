@@ -42,6 +42,12 @@ class RH_Comments {
 		);
 	}
 
+	/**
+	 * Render comments and comment form
+	 *
+	 * @param  array   $args  Arguments to override what is rendered
+	 * @param  WP_Post $post The WordPress post to render comments for
+	 */
 	public static function render( $args = array(), $post = null ) {
 		if ( ! comments_open() && ! get_comments_number() ) {
 			return;
@@ -61,6 +67,11 @@ class RH_Comments {
 		return Sprig::render( 'the-comments.twig', $context );
 	}
 
+	/**
+	 * Render the comments for a post
+	 *
+	 * @param  WP_Post $post The WordPress post to render comments for
+	 */
 	public static function render_comments( $post = null ) {
 		$post         = get_post( $post );
 		$comment_args = array(
@@ -97,9 +108,14 @@ class RH_Comments {
 		return $the_comments;
 	}
 
-	public static function render_comment( $the_comment, $args, $the_depth ) {
-		// var_dump( $the_comment );
-		// var_dump( $args );
+	/**
+	 * Render an individual comment
+	 *
+	 * @param  WP_Comment $the_comment The WordPress comment object with data to render
+	 * @param  array      $args Arguments to override what is rendered
+	 * @param  integer    $the_depth The depth of rendering comments
+	 */
+	public static function render_comment( $the_comment, $args = array(), $the_depth = 1 ) {
 		$comment_date = get_comment_datetime( $the_comment );
 		$context      = array(
 			'the_id'           => $the_comment->comment_ID,
@@ -124,6 +140,14 @@ class RH_Comments {
 		Sprig::out( 'comment.twig', $context );
 	}
 
+	/**
+	 * Render a comment form
+	 *
+	 * @link https://developer.wordpress.org/reference/functions/comment_form/
+	 *
+	 * @param  array   $args Arguments to override what is rendered
+	 * @param  WP_Post $post The WordPress post to render the comment form for
+	 */
 	public static function render_comment_form( $args = array(), $post = null ) {
 		$defaults = array(
 			'logged_in_as'         => static::render_logged_in_as(),
@@ -145,6 +169,12 @@ class RH_Comments {
 		return ob_get_clean();
 	}
 
+	/**
+	 * Render markup for the comment form when a user is loffed in
+	 *
+	 * @param  array   $args Arguments to override what is rendered
+	 * @param  WP_Post $post The WordPress post to render for
+	 */
 	public static function render_logged_in_as( $args = array(), $post = null ) {
 		$post           = get_post( $post );
 		$the_permalink  = apply_filters( 'the_permalink', get_permalink( $post->ID ), $post->ID );
