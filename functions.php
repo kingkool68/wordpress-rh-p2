@@ -48,38 +48,36 @@ foreach ( $files_to_require as $filename ) {
 
 // Autoload block classes
 $blocks_path = get_template_directory() . '/blocks/';
-if ( is_dir( $blocks_path ) ) {
-	$directory = new RecursiveDirectoryIterator( $blocks_path );
-	$filter    = new RecursiveCallbackFilterIterator(
-		$directory,
-		function ( $current ) {
-			// Skip hidden files and directories.
-			if ( $current->getFilename()[0] === '.' ) {
-				return false;
-			}
-			if ( $current->getExtension() === '' || $current->getExtension() === 'php' ) {
-				return true;
-			}
+$directory   = new RecursiveDirectoryIterator( $blocks_path );
+$filter      = new RecursiveCallbackFilterIterator(
+	$directory,
+	function ( $current ) {
+		// Skip hidden files and directories.
+		if ( $current->getFilename()[0] === '.' ) {
 			return false;
 		}
-	);
-	$iterator  = new RecursiveIteratorIterator( $filter );
-	foreach ( $iterator as $file ) {
-		$the_file = $file->getPathname();
-		if ( file_exists( $the_file ) ) {
-			require_once $the_file;
+		if ( $current->getExtension() === '' || $current->getExtension() === 'php' ) {
+			return true;
 		}
+		return false;
+	}
+);
+$iterator    = new RecursiveIteratorIterator( $filter );
+foreach ( $iterator as $file ) {
+	$the_file = $file->getPathname();
+	if ( file_exists( $the_file ) ) {
+		require_once $the_file;
 	}
 }
 
 
-/**
- * Add the styleguide directory to the known directories Sprig should look
- * for Twig files to render
- *
- * @param  array $paths Places Twig should look for Twig files
- * @return array         Modified paths
- */
+	/**
+	 * Add the styleguide directory to the known directories Sprig should look
+	 * for Twig files to render
+	 *
+	 * @param  array $paths Places Twig should look for Twig files
+	 * @return array         Modified paths
+	 */
 function filter_sprig_roots( $paths = array() ) {
 	$paths[] = get_template_directory() . '/styleguide';
 
@@ -99,121 +97,121 @@ function filter_sprig_roots( $paths = array() ) {
 	}
 	return $paths;
 }
-// add_filter( 'sprig/roots', 'filter_sprig_roots' );
+	add_filter( 'sprig/roots', 'filter_sprig_roots' );
 
-/**
- * Make additional PHP functions available as Twig filters
- *
- * @param array $filters The Twig filters to modify
- */
+	/**
+	 * Make additional PHP functions available as Twig filters
+	 *
+	 * @param array $filters The Twig filters to modify
+	 */
 function filter_sprig_twig_filters( $filters = array() ) {
 	$filters['sanitize_title'] = 'sanitize_title';
 	return $filters;
 }
-add_filter( 'sprig/twig/filters', 'filter_sprig_twig_filters' );
+	add_filter( 'sprig/twig/filters', 'filter_sprig_twig_filters' );
 
-/**
- * Make additional PHP functions available as Twig functions
- *
- * @param  array $functions The Twig functions to modify
- */
+	/**
+	 * Make additional PHP functions available as Twig functions
+	 *
+	 * @param  array $functions The Twig functions to modify
+	 */
 function filter_sprig_twig_functions( $functions = array() ) {
 	$functions['get_language_attributes'] = 'get_language_attributes';
 	return $functions;
 }
-add_filter( 'sprig/twig/functions', 'filter_sprig_twig_functions' );
-
-/**
- * Add support for the title tag as of WordPress version 4.1
- *
- * @link https://codex.wordpress.org/Title_Tag#Adding_Theme_Support
- */
-add_action(
-	'init',
-	function () {
-		add_theme_support( 'title-tag' );
-		add_theme_support( 'align-wide' );
-	}
-);
-
-if ( ! function_exists( 'str_starts_with' ) ) {
-	/**
-	 * Polyfill for PHP 8's str_starts_with
-	 *
-	 * @link https://php.watch/versions/8.0/str_starts_with-str_ends_with
-	 *
-	 * @param string $haystack The string to search in.
-	 * @param string $needle   The substring to search for in the haystack.
-	 * @return boolean
-	 */
-	function str_starts_with( string $haystack, string $needle ): bool {
-		return \strncmp( $haystack, $needle, \strlen( $needle ) ) === 0;
-	}
-}
-
-if ( ! function_exists( 'str_contains' ) ) {
-	/**
-	 * Polyfill for PHP8's str_contains
-	 *
-	 * @link https://php.watch/versions/8.0/str_contains
-	 *
-	 * @param string $haystack The string to search in.
-	 * @param string $needle   The substring to search for in the haystack.
-	 * @return boolean
-	 */
-	function str_contains( string $haystack, string $needle ): bool {
-		return '' === $needle || false !== strpos( $haystack, $needle );
-	}
-}
-
-if ( ! function_exists( 'get_comment_datetime' ) ) {
+	add_filter( 'sprig/twig/functions', 'filter_sprig_twig_functions' );
 
 	/**
-	 * Retrieve comment published time as a `DateTimeImmutable` object instance.
+	 * Add support for the title tag as of WordPress version 4.1
 	 *
-	 * The object will be set to the timezone from WordPress settings.
-	 *
-	 * For legacy reasons, this function allows to choose to instantiate from local or UTC time in database.
-	 * Normally this should make no difference to the result. However, the values might get out of sync in database,
-	 * typically because of timezone setting changes. The parameter ensures the ability to reproduce backwards
-	 * compatible behaviors in such cases.
-	 *
-	 * @link https://core.trac.wordpress.org/ticket/48207
-	 *
-	 * @since 5.4.0
-	 *
-	 * @param int|WP_Comment $comment   Optional. WP_Comment object or ID. Default is global `$comment` object.
-	 * @param string         $source Optional. Local or UTC time to use from database. Accepts 'local' or 'gmt'.
-	 *                            Default 'local'.
-	 * @return DateTimeImmutable|false Time object on success, false on failure.
+	 * @link https://codex.wordpress.org/Title_Tag#Adding_Theme_Support
 	 */
-	function get_comment_datetime( $comment = null, $source = 'local' ) {
+	add_action(
+		'init',
+		function () {
+			add_theme_support( 'title-tag' );
+			add_theme_support( 'align-wide' );
+		}
+	);
+
+	if ( ! function_exists( 'str_starts_with' ) ) {
+		/**
+		 * Polyfill for PHP 8's str_starts_with
+		 *
+		 * @link https://php.watch/versions/8.0/str_starts_with-str_ends_with
+		 *
+		 * @param string $haystack The string to search in.
+		 * @param string $needle   The substring to search for in the haystack.
+		 * @return boolean
+		 */
+		function str_starts_with( string $haystack, string $needle ): bool {
+			return \strncmp( $haystack, $needle, \strlen( $needle ) ) === 0;
+		}
+	}
+
+	if ( ! function_exists( 'str_contains' ) ) {
+		/**
+		 * Polyfill for PHP8's str_contains
+		 *
+		 * @link https://php.watch/versions/8.0/str_contains
+		 *
+		 * @param string $haystack The string to search in.
+		 * @param string $needle   The substring to search for in the haystack.
+		 * @return boolean
+		 */
+		function str_contains( string $haystack, string $needle ): bool {
+			return '' === $needle || false !== strpos( $haystack, $needle );
+		}
+	}
+
+	if ( ! function_exists( 'get_comment_datetime' ) ) {
+
+		/**
+		 * Retrieve comment published time as a `DateTimeImmutable` object instance.
+		 *
+		 * The object will be set to the timezone from WordPress settings.
+		 *
+		 * For legacy reasons, this function allows to choose to instantiate from local or UTC time in database.
+		 * Normally this should make no difference to the result. However, the values might get out of sync in database,
+		 * typically because of timezone setting changes. The parameter ensures the ability to reproduce backwards
+		 * compatible behaviors in such cases.
+		 *
+		 * @link https://core.trac.wordpress.org/ticket/48207
+		 *
+		 * @since 5.4.0
+		 *
+		 * @param int|WP_Comment $comment   Optional. WP_Comment object or ID. Default is global `$comment` object.
+		 * @param string         $source Optional. Local or UTC time to use from database. Accepts 'local' or 'gmt'.
+		 *                            Default 'local'.
+		 * @return DateTimeImmutable|false Time object on success, false on failure.
+		 */
+		function get_comment_datetime( $comment = null, $source = 'local' ) {
 			$comment = get_comment( $comment );
 
-		if ( ! $comment ) {
-			return false;
-		}
-
-		$wp_timezone = wp_timezone();
-
-		if ( 'gmt' === $source ) {
-			$time     = $comment->comment_date_gmt;
-			$timezone = new DateTimeZone( 'UTC' );
-		} else {
-			$time     = $comment->comment_date;
-			$timezone = $wp_timezone;
-		}
-
-		if ( empty( $time ) || '0000-00-00 00:00:00' === $time ) {
+			if ( ! $comment ) {
 				return false;
-		}
+			}
 
-		$datetime = date_create_immutable_from_format( 'Y-m-d H:i:s', $time, $timezone );
+			$wp_timezone = wp_timezone();
 
-		if ( false === $datetime ) {
+			if ( 'gmt' === $source ) {
+				$time     = $comment->comment_date_gmt;
+				$timezone = new DateTimeZone( 'UTC' );
+			} else {
+				$time     = $comment->comment_date;
+				$timezone = $wp_timezone;
+			}
+
+			if ( empty( $time ) || '0000-00-00 00:00:00' === $time ) {
 				return false;
-		}
+			}
 
-		return $datetime->setTimezone( $wp_timezone );
+			$datetime = date_create_immutable_from_format( 'Y-m-d H:i:s', $time, $timezone );
+
+			if ( false === $datetime ) {
+				return false;
+			}
+
+			return $datetime->setTimezone( $wp_timezone );
+		}
 	}
-}
