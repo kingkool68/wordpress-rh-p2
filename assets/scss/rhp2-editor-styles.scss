@@ -1,0 +1,17 @@
+@import 'base/_imports.scss';
+
+@import 'components/_visibility.scss';
+
+@import 'components/_general.scss';
+@import 'components/_wysiwyg.scss';
+@import 'components/_media.scss';
+@import 'components/_svg.scss';
+
+.wp-editor-area {
+        font-family: $text-font !important;
+        color: $black;
+        background-color: $white;
+}
+.wp-block {
+    max-width: $maximum-page-width;
+}

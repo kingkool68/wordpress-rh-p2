@@ -1,0 +1,29 @@
+{% if the_comments or the_comment_form %}
+	<section class="the-comments" id="the-comments">
+		{% if the_comments_count %}
+			<h2 class="the-comment-section-title">
+                {% if the_comments_permalink %}
+                    <a href="{{ the_comments_permalink|esc_url }}#the-comments">
+                {% endif %}
+
+                    {{ the_comments_count }}
+                    {% if the_comments_count == 1 %}
+                        Reply
+                    {% else %}
+                        Replies
+                    {% endif %}
+
+                {% if the_comments_permalink %}
+                    </a>
+                {% endif %}
+			</h2>
+		{% endif %}
+
+		{% if the_comments %}
+			<ol class="comments">
+				{{ the_comments }}
+			</ol>
+		{% endif %}
+		{{ the_comment_form }}
+	</section>
+{% endif %}
