@@ -47,26 +47,28 @@ foreach ( $files_to_require as $filename ) {
 }
 
 // Autoload block classes
-$path      = get_template_directory() . '/blocks/';
-$directory = new RecursiveDirectoryIterator( $path );
-$filter    = new RecursiveCallbackFilterIterator(
-	$directory,
-	function ( $current ) {
-		// Skip hidden files and directories.
-		if ( $current->getFilename()[0] === '.' ) {
+$blocks_path = get_template_directory() . '/blocks/';
+if ( is_dir( $blocks_path ) ) {
+	$directory = new RecursiveDirectoryIterator( $blocks_path );
+	$filter    = new RecursiveCallbackFilterIterator(
+		$directory,
+		function ( $current ) {
+			// Skip hidden files and directories.
+			if ( $current->getFilename()[0] === '.' ) {
+				return false;
+			}
+			if ( $current->getExtension() === '' || $current->getExtension() === 'php' ) {
+				return true;
+			}
 			return false;
 		}
-		if ( $current->getExtension() === '' || $current->getExtension() === 'php' ) {
-			return true;
+	);
+	$iterator  = new RecursiveIteratorIterator( $filter );
+	foreach ( $iterator as $file ) {
+		$the_file = $file->getPathname();
+		if ( file_exists( $the_file ) ) {
+			require_once $the_file;
 		}
-		return false;
-	}
-);
-$iterator  = new RecursiveIteratorIterator( $filter );
-foreach ( $iterator as $file ) {
-	$the_file = $file->getPathname();
-	if ( file_exists( $the_file ) ) {
-		require_once $the_file;
 	}
 }
 
@@ -97,7 +99,7 @@ function filter_sprig_roots( $paths = array() ) {
 	}
 	return $paths;
 }
-add_filter( 'sprig/roots', 'filter_sprig_roots' );
+// add_filter( 'sprig/roots', 'filter_sprig_roots' );
 
 /**
  * Make additional PHP functions available as Twig filters
