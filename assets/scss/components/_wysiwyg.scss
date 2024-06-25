@@ -68,9 +68,9 @@
     code {
         font-family: $mono-font;
         line-height: 1.8125;
-        border-radius: rem(3px);
+        border-radius: rem(6px);
         padding: rem(3px);
-        background-color: #f3f3f3;
+        background-color: $gray-05;
 
         &.shcb-wrap-lines {
             white-space: pre-wrap;
@@ -80,6 +80,7 @@
     .wp-block-code {
         margin-bottom: rem(16px);
         background-color: $gray-05;
+        border-radius: rem(6px);
         padding: rem(24px);
         overflow: auto;
     }
