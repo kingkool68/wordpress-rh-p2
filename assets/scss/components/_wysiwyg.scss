@@ -196,7 +196,6 @@
     }
 
     .wp-block-image {
-        align-items: flex-start;
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
@@ -215,13 +214,12 @@
         }
 
         figcaption {
-            font-size: rem(15px);
+            font-size: rem(13px);
+            line-height: 1.5;
             padding-top: rem(8px);
-        }
-
-        // If the image is centered aligned, center the image caption
-        .aligncenter figcaption {
             text-align: center;
+            color: #767676;
+            margin: 0.75em 0 1em;
         }
     }
 
