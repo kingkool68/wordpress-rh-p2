@@ -2,7 +2,8 @@
 	"name": "kingkool68/wordpress-rh-p2",
 	"description": "Russell Heimlich's P2 Clone",
 	"require": {
-		"php": "^8.2"
+		"php": "^8.2",
+		"paquettg/php-html-parser": "^3.1"
 	},
 	"require-dev": {
 		"phpcompatibility/phpcompatibility-wp": "*",

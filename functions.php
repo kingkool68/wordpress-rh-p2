@@ -30,6 +30,7 @@ $files_to_require = array(
 	'class-rh-posts.php',
 	'class-rh-pages.php',
 	'class-rh-comments.php',
+	'class-rh-p2-comment-importer.php',
 
 	'class-rh-blocks.php',
 	'class-rh-cli.php',
