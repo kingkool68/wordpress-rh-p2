@@ -86,14 +86,10 @@
     }
 
     blockquote {
-        margin: 0 0 rem(16px);
-        border: rem(1px) solid $gray-10;
-        border-radius: rem(4px);
-        padding: rem(28px);
-
-        >* {
-            font-size: rem(16px);
-        }
+        background-color: #f9f9f9;
+        border-left: rem(4px) solid $link-blue;
+        padding: rem(19.2px) rem(32px);
+        margin-bottom: rem(28px);
 
         >:last-child {
             margin-bottom: 0;
