@@ -117,6 +117,9 @@ class RH_Comments {
 	 */
 	public static function render_comment( $the_comment, $args = array(), $the_depth = 1 ) {
 		$comment_date = get_comment_datetime( $the_comment );
+		$comment_text = get_comment_text( $the_comment );
+		$comment_text = make_clickable( $comment_text );
+		$comment_text = static::link_cross_posts( $comment_text );
 		$context      = array(
 			'the_id'           => $the_comment->comment_ID,
 			'the_name'         => $the_comment->comment_author,
@@ -128,7 +131,7 @@ class RH_Comments {
 			),
 			'the_date'         => $comment_date->format( 'g:i a \o\n F j, Y' ),
 			'the_machine_date' => $comment_date->format( DATE_W3C ),
-			'the_comment'      => apply_filters( 'the_content', get_comment_text( $the_comment ) ),
+			'the_comment'      => apply_filters( 'the_content', $comment_text ),
 			'the_reply_link'   => get_comment_reply_link(
 				array(
 					'depth'     => $the_depth,
@@ -195,6 +198,27 @@ class RH_Comments {
 		);
 		$context  = wp_parse_args( $args, $defaults );
 		return Sprig::render( 'comment-form--logged-in-as.twig', $context );
+	}
+
+	/**
+	 * Link occurances of cross-posted blogs to their respective domains
+	 *
+	 * @example +example --> https://example.wordpress.com
+	 *
+	 * @param  string $text The text to find x-posts in
+	 */
+	public static function link_cross_posts( $text = '' ) {
+		preg_match_all( '/\+((\w)+)/i', $text, $matches );
+		if ( ! empty( $matches[0] ) ) {
+			foreach ( $matches[0] as $index => $link_text ) {
+				if ( ! empty( $matches[1][ $index ] ) ) {
+					$link_url = 'https://' . $matches[1][ $index ] . '.wordpress.com/';
+					$link     = '<a href="' . esc_url( $link_url ) . '" class="x-post-link">' . $link_text . '</a>';
+					$text     = str_replace( $link_text, $link, $text );
+				}
+			}
+		}
+		return $text;
 	}
 }
 RH_Comments::get_instance();
