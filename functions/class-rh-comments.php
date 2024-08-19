@@ -208,13 +208,15 @@ class RH_Comments {
 	 * @param  string $text The text to find x-posts in
 	 */
 	public static function link_cross_posts( $text = '' ) {
-		preg_match_all( '/\+((\w)+)/i', $text, $matches );
-		if ( ! empty( $matches[0] ) ) {
-			foreach ( $matches[0] as $index => $link_text ) {
-				if ( ! empty( $matches[1][ $index ] ) ) {
-					$link_url = 'https://' . $matches[1][ $index ] . '.wordpress.com/';
-					$link     = '<a href="' . esc_url( $link_url ) . '" class="x-post-link">' . $link_text . '</a>';
-					$text     = str_replace( $link_text, $link, $text );
+		preg_match_all( '/(^|\W)\+((\w)+)/i', $text, $matches );
+		if ( ! empty( $matches[2] ) ) {
+			foreach ( $matches[2] as $index => $link_text ) {
+				if ( ! empty( $matches[2][ $index ] ) ) {
+					$matched_text = $matches[2][ $index ];
+					$link_url     = 'https://' . $matched_text . '.wordpress.com/';
+					$link         = '<a href="' . esc_url( $link_url ) . '" class="x-post-link">+' . $matched_text . '</a>';
+					$search_for   = '+' . $matched_text;
+					$text         = str_replace( $search_for, $link, $text );
 				}
 			}
 		}
