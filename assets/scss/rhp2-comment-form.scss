@@ -117,6 +117,16 @@
 				margin-bottom: 0;
 			}
 		}
+
+		.wp-block-preformatted {
+			background-color: #f3f3f3;
+			border-radius: rem(2px);
+			padding: rem(26px);
+			margin-bottom: rem(23.4px);
+			font-family: $mono-font;
+			font-size: rem(13px);
+			white-space: pre-wrap;
+		}
 	}
 
 	.depth-2 {
