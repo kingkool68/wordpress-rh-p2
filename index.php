@@ -1,8 +1,8 @@
 <?php
 $the_title          = '';
 $the_queried_object = get_queried_object();
-if ( ! empty( $the_queried_object->name ) ) {
-	$the_title = apply_filters( 'the_title', $the_queried_object->name );
+if ( ! empty( $the_queried_object->slug ) ) {
+	$the_title = $the_queried_object->slug;
 	$the_title = 'Tagged #' . $the_title;
 }
 
