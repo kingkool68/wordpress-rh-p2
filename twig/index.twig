@@ -1,6 +1,12 @@
 {% extends 'base.twig' %}
 
 {% block content %}
+	{% if the_title %}
+		<h1 class="the-page-title">
+			{{ the_title }}
+		</h1>
+	{% endif %}
+
 	{% if the_posts %}
 		<div class="the-posts">
 			{% for item in the_posts %}

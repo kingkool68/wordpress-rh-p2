@@ -2,6 +2,14 @@
 	padding: rem(80px) rem(40px) rem(16px);
 }
 
+.the-page-title {
+	@include h2();
+
+	font-weight: 500;
+	max-width: $maximum-page-width;
+	margin: rem(-32px) auto rem(48px);
+}
+
 .the-page {
 	max-width: $maximum-page-width;
 	margin-left: auto;
