@@ -1,68 +1,63 @@
 $_breakpoint : em(960px);
 
-// Ensure anchor links don't get covered by the sticky header
-// See https://stackoverflow.com/a/58890319/1119655
-@mixin anchor_link_offset {
-    padding-top: rem($header_height + 5px); // 5px buffer
-    margin-top: rem($header_height + 5px) * -1;
-
-    .admin-bar & {
-        padding-top: rem($header_height + $admin_bar_height + 5px); // 5px buffer
-        margin-top: rem($header_height + $admin_bar_height + 5px) * -1;
-    }
-}
-
-h1[id],
-h2[id],
-h3[id],
-h4[id],
-h5[id],
-h6[id] {
-    // @include anchor_link_offset();
-}
-
 .site-header {
-    border-bottom: rem(1px) solid $gray-15;
-    background-color: $white;
-    top: 0;
-    position: sticky;
-    width: 100%;
-    z-index: 100;
+	border-bottom: rem(1px) solid $gray-15;
+	background-color: $white;
+	top: 0;
+	position: sticky;
+	width: 100%;
+	z-index: 100;
 
-    .admin-bar & {
-        top: rem(32px);
+	.admin-bar & {
+		top: rem(32px);
 
-        @media(max-width: em(782px)) {
-            top: rem(46px);
-        }
+		@media(max-width: em(782px)) {
+			top: rem(46px);
+		}
 
-        @media(max-width: em(600px)) {
-            top: 0;
-        }
-    }
+		@media(max-width: em(600px)) {
+			top: 0;
+		}
+	}
 
-    .inner {
-        max-width: 95%;
-        margin: 0 auto;
-        padding: rem(12px) rem(24px);
-        display: flex;
-        align-items: center;
+	.inner {
+		max-width: 95%;
+		margin: 0 auto;
+		padding: rem(12px) rem(24px);
+		display: flex;
+		align-items: center;
 
-        @media(max-width: $_breakpoint) {
-            justify-content: space-between;
-        }
-    }
+		@media(max-width: $_breakpoint) {
+			justify-content: space-between;
+		}
+	}
 
-    .the-site-name {
-        font-size: rem(22px);
-        font-weight: 700;
-        line-height: 1.40;
-        color: $black;
-        text-decoration: none;
+	.the-site-name {
+		font-size: rem(22px);
+		font-weight: 700;
+		line-height: 1.40;
+		color: $black;
+		text-decoration: none;
 
-        &:hover,
-        &:focus {
-            text-decoration: underline;
-        }
-    }
+		&:hover,
+		&:focus {
+			text-decoration: underline;
+		}
+	}
+
+	.nav-container {
+		margin-left: auto;
+
+		a {
+			color: $black;
+			text-decoration: none;
+			font-weight: 700;
+
+			&:hover,
+			&:focus {
+				text-decoration: underline;
+			}
+		}
+	}
+
 }
